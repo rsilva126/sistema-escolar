@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Frequência</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container">
+
+            <div class="page-header">
+                <div>
+                    <h1>Editar Frequência</h1>
+                    <p class="page-description">
+                        Atualize os dados do registro de frequência selecionado.
+                    </p>
+                </div>
+
+                <div class="table-header-right">
+                    <a href="/diario/frequencias" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <form th:action="@{/diario/frequencia/atualizar}" th:object="${frequencia}" method="post">
+
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="form-grid">
+
+                        <div class="form-field">
+                            <label for="matriculaId">Aluno / Matrícula</label>
+                            <select id="matriculaId" th:field="*{matriculaId}" required>
+                                <option value="">Selecione</option>
+                                <option th:each="m : ${matriculas}"
+                                        th:value="${m.id}"
+                                        th:text="${m.aluno.nome + ' - ' + m.numeroMatricula}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="professorTurmaDisciplinaId">Vínculo</label>
+                            <select id="professorTurmaDisciplinaId" th:field="*{professorTurmaDisciplinaId}" required>
+                                <option value="">Selecione</option>
+                                <option th:each="v : ${vinculos}"
+                                        th:value="${v.id}"
+                                        th:text="${v.usuario.nome + ' - ' + v.turma.nome + ' - ' + v.disciplina.nome}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="dataAula">Data da Aula</label>
+                            <input type="date" id="dataAula" th:field="*{dataAula}" required>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="presenca">Presença</label>
+                            <select id="presenca" th:field="*{presenca}" required>
+                                <option value="PRESENTE">PRESENTE</option>
+                                <option value="AUSENTE">AUSENTE</option>
+                            </select>
+                        </div>
+
+                        <div class="form-field form-field-full">
+                            <label for="observacao">Observação</label>
+                            <input type="text" id="observacao" th:field="*{observacao}">
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn">Atualizar Frequência</button>
+                        <a href="/diario/frequencias" class="btn btn-secondary">Cancelar</a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+</body>
+</html> 

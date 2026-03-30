@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<aside th:fragment="sidebarInstitucional" class="sidebar">
+
+    <div class="sidebar-header-modern">
+        <div class="sidebar-avatar">🎓</div>
+
+        <div class="sidebar-title-modern">
+            <h2 style="color:#ffffff !important;">Sistema Escolar</h2>
+            <p style="color:rgba(255,255,255,0.85) !important;">Gestão educacional municipal</p>
+        </div>
+    </div>
+
+    <nav>
+        <a href="/">🏠 Painel Principal</a>
+
+        <a href="/escolas-view"
+           sec:authorize="hasAnyRole('ADMINISTRADOR','DIRETOR','SECRETARIO')">
+            🏢 Escolas
+        </a>
+
+        <a href="/alunos-view"
+           sec:authorize="hasAnyRole('ADMINISTRADOR','SECRETARIO','COORDENADOR','DIRETOR')">
+            👨‍🎓 Alunos
+        </a>
+
+        <a href="/turmas-view"
+           sec:authorize="hasAnyRole('ADMINISTRADOR','SECRETARIO','COORDENADOR','DIRETOR')">
+            🏫 Turmas
+        </a>
+
+        <a href="/matriculas-view"
+           sec:authorize="hasAnyRole('ADMINISTRADOR','SECRETARIO','COORDENADOR','DIRETOR')">
+            📝 Matrículas
+        </a>
+
+        <a href="/usuarios-view"
+           sec:authorize="hasAnyRole('ADMINISTRADOR','DIRETOR')">
+            👥 Usuários
+        </a>
+
+        <a href="/professor-turma-disciplina-view"
+           sec:authorize="hasAnyRole('ADMINISTRADOR','COORDENADOR','DIRETOR')">
+            📘 Diário - Vínculos
+        </a>
+
+        <a href="/diario"
+           sec:authorize="hasAnyRole('ADMINISTRADOR','PROFESSOR','COORDENADOR','DIRETOR')">
+            📗 Diário Escolar
+        </a>
+    </nav>
+
+</aside>
+
+</body>
+</html> 

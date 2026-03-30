@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<div th:fragment="topbarInstitucional" class="topbar">
+    <div class="topbar-wrap">
+
+        <div class="topbar-brand">
+            <img src="/img/logo-prefeitura.png"
+                 alt="Prefeitura de Carapebus"
+                 class="topbar-logo-main">
+
+            <div class="topbar-brand-text">
+                <div class="topbar-line-small">Estado do Rio de Janeiro</div>
+                <div class="topbar-line-title">Prefeitura Municipal de Carapebus</div>
+                <div class="topbar-line-small">Secretaria Municipal de Educação</div>
+            </div>
+        </div>
+
+        <div class="topbar-actions">
+            <div class="topbar-user" sec:authorize="isAuthenticated()">
+                <span>👤</span>
+                <span sec:authentication="name"></span>
+            </div>
+
+            <form th:action="@{/logout}" method="post" class="topbar-logout-form">
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+                <button type="submit" class="btn btn-secondary topbar-logout-button">
+                    Sair
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html> 

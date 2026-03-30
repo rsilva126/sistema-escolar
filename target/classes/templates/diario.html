@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Diário Escolar</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container">
+
+            <div class="page-header">
+                <div>
+                    <h1>📘 Diário Escolar</h1>
+                    <p class="page-description">
+                        Lançamento e controle de frequência dos alunos.
+                    </p>
+                </div>
+
+                <div class="table-header-right">
+                    <a href="/diario/frequencias" class="btn btn-secondary">📋 Ver Frequências</a>
+                    <a href="/diario/relatorio-aluno" class="btn btn-secondary">📊 Relatório por Aluno</a>
+                    <a href="/" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+
+            <p th:if="${mensagemSucesso}" th:text="${mensagemSucesso}" class="message-success"></p>
+            <p th:if="${mensagemErro}" th:text="${mensagemErro}" class="message-error"></p>
+
+            <div class="form-card">
+                <form th:action="@{/diario/frequencia}" method="get">
+
+                    <div class="form-grid">
+
+                        <div class="form-field form-field-full">
+                            <label for="vinculoId">Professor / Turma / Disciplina</label>
+                            <select id="vinculoId" name="vinculoId" required>
+                                <option value="">Selecione</option>
+                                <option th:each="v : ${vinculos}"
+                                        th:value="${v.id}"
+                                        th:text="${v.usuario.nome + ' - ' + v.turma.nome + ' - ' + v.disciplina.nome}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="dataAula">Data da Aula</label>
+                            <input type="date" id="dataAula" name="dataAula" required>
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions" style="margin-top: 20px;">
+                        <button type="submit" class="btn">Lançar Frequência</button>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="info-panel">
+                <h4>Como utilizar o diário</h4>
+                <p>
+                    Selecione o vínculo do professor com a turma e a disciplina, informe a data da aula
+                    e clique em <strong>Lançar Frequência</strong>. Para consultar registros já lançados,
+                    use <strong>Ver Frequências</strong>. Para acompanhamento individual, use
+                    <strong>Relatório por Aluno</strong>.
+                </p>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+</body>
+</html> 

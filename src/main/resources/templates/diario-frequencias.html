@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Frequências</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="layout">
+
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container">
+
+            <!-- HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1>Frequências</h1>
+                    <p class="page-description">
+                        Consulte, filtre e edite os registros de frequência dos alunos.
+                    </p>
+                </div>
+
+                <div class="table-header-right">
+                    <a href="/diario" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+
+            <!-- MENSAGENS -->
+            <div th:if="${mensagemSucesso}" class="message-success">
+                <span th:text="${mensagemSucesso}"></span>
+            </div>
+
+            <div th:if="${mensagemErro}" class="message-error">
+                <span th:text="${mensagemErro}"></span>
+            </div>
+
+            <!-- FILTRO -->
+            <div class="filter-panel">
+
+                <form method="get" action="/diario/frequencias" class="filter-form">
+
+                    <div class="filter-group">
+
+                        <div class="form-field">
+                            <label>Turma</label>
+                            <select name="turmaId">
+                                <option value="">Todas</option>
+                                <option th:each="t : ${turmas}"
+                                        th:value="${t.id}"
+                                        th:text="${t.nome}"
+                                        th:selected="${t.id == turmaId}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label>Data</label>
+                            <input type="date" name="dataAula" th:value="${dataAula}">
+                        </div>
+
+                    </div>
+
+                    <div class="filter-actions">
+                        <button type="submit" class="btn">Aplicar</button>
+                        <a href="/diario/frequencias" class="btn btn-secondary">Limpar</a>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!-- TABELA -->
+            <div class="table-container">
+
+                <table class="table">
+
+                    <thead>
+                    <tr>
+                        <th>Aluno</th>
+                        <th>Turma</th>
+                        <th>Disciplina</th>
+                        <th>Data</th>
+                        <th>Presença</th>
+                        <th>Observação</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="f : ${frequencias}">
+
+                        <td th:text="${f.aluno}"></td>
+                        <td th:text="${f.turma}"></td>
+                        <td th:text="${f.disciplina}"></td>
+                        <td th:text="${f.dataAula}"></td>
+
+                        <td>
+                            <span th:if="${f.presenca == 'PRESENTE'}"
+                                  class="badge badge-success">Presente</span>
+
+                            <span th:if="${f.presenca == 'AUSENTE'}"
+                                  class="badge badge-danger">Ausente</span>
+                        </td>
+
+                        <td th:text="${f.observacao}"></td>
+
+                        <td>
+                            <div class="action-group">
+
+                                <a th:href="@{/diario/frequencia/editar/{id}(id=${f.id})}"
+                                   class="action-link action-edit">
+                                    ✏️ Editar
+                                </a>
+
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(frequencias)}">
+                        <td colspan="7" class="empty-message">
+                            Nenhum registro encontrado.
+                        </td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html> 

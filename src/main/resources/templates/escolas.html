@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Escolas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container">
+            <div class="table-header">
+                <div class="table-header-left">
+                    <h2>Gerenciamento de Escolas</h2>
+                    <p>Cadastre, edite e consulte as escolas do sistema.</p>
+                    <div class="actions" style="margin-top:10px;">
+                        <span class="stat-chip">🏫 Escolas encontradas: <span th:text="${totalItens}"></span></span>
+                    </div>
+                </div>
+
+                <div class="table-header-right">
+                    <a href="/escolas/novo" class="btn">Nova Escola</a>
+                    <a href="/" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+
+            <form method="get" action="/escolas-view" class="filter-panel">
+                <h3 class="filter-panel-title">Pesquisa</h3>
+
+                <div class="filter-grid">
+                    <div class="filter-field">
+                        <label for="busca">Nome da escola</label>
+                        <input type="text" id="busca" name="busca" th:value="${busca}" placeholder="Digite o nome...">
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="btn">Pesquisar</button>
+                    <a href="/escolas-view" class="btn btn-secondary">Limpar</a>
+                </div>
+            </form>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Código INEP</th>
+                        <th>CNPJ</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="escola : ${escolas}">
+                        <td th:text="${escola.id}"></td>
+                        <td th:text="${escola.nome}"></td>
+                        <td th:text="${escola.codigoInep}"></td>
+                        <td th:text="${escola.cnpj}"></td>
+                        <td th:text="${escola.telefone}"></td>
+                        <td th:text="${escola.email}"></td>
+                        <td th:text="${escola.status}"></td>
+                        <td>
+                            <div class="action-group">
+                                <a th:href="@{/escolas/editar/{id}(id=${escola.id})}" class="action-link action-edit">Editar</a>
+                                <a th:href="@{/escolas/excluir/{id}(id=${escola.id})}"
+                                   class="action-link action-delete"
+                                   onclick="return confirm('Deseja realmente excluir esta escola?');">
+                                    Excluir
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="toast-container">
+                <div th:if="${mensagemSucesso}" class="toast toast-success" id="toastSucesso">
+                    <span th:text="${mensagemSucesso}"></span>
+                    <small>Operação realizada com sucesso.</small>
+                </div>
+
+                <div th:if="${mensagemErro}" class="toast toast-error" id="toastErro">
+                    <span th:text="${mensagemErro}"></span>
+                    <small>Verifique os dados e tente novamente.</small>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    const toastSucesso = document.getElementById("toastSucesso");
+    const toastErro = document.getElementById("toastErro");
+
+    function esconderToast(toast) {
+        if (toast) {
+            setTimeout(() => {
+                toast.classList.add("toast-hide");
+            }, 2500);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 2900);
+        }
+    }
+
+    esconderToast(toastSucesso);
+    esconderToast(toastErro);
+</script>
+
+</body>
+</html>

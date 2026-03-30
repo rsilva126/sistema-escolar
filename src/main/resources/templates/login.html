@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Sistema Escolar</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body class="login-body">
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <div class="login-card-left">
+            <div class="login-brand">
+                <img src="/img/logo-prefeitura.png"
+                     alt="Prefeitura de Carapebus"
+                     class="login-logo">
+            </div>
+
+            <div class="login-gov-tag">Acesso institucional</div>
+
+            <h1 class="login-title">Sistema Escolar</h1>
+
+            <p class="login-subtitle">
+                Prefeitura Municipal de Carapebus<br>
+                Secretaria Municipal de Educação
+            </p>
+
+            <div class="login-info-box">
+                <h3>Ambiente protegido</h3>
+                <p>
+                    Utilize seu email institucional e sua senha para acessar
+                    os módulos administrativos e pedagógicos do sistema.
+                </p>
+            </div>
+        </div>
+
+        <div class="login-card-right">
+            <div class="login-form-header">
+                <h2>Entrar</h2>
+                <p>Informe seus dados de acesso.</p>
+            </div>
+
+            <div class="login-message">
+                <p th:if="${param.error}" class="message-error">
+                    Email ou senha inválidos.
+                </p>
+
+                <p th:if="${param.logout}" class="message-success">
+                    Logout realizado com sucesso.
+                </p>
+            </div>
+
+            <form th:action="@{/login}" method="post" class="login-form">
+
+                <div class="login-field">
+                    <label for="username">Email</label>
+                    <input type="email"
+                           id="username"
+                           name="username"
+                           placeholder="seuemail@exemplo.com"
+                           required>
+                </div>
+
+                <div class="login-field">
+                    <label for="password">Senha</label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           placeholder="Digite sua senha"
+                           required>
+                </div>
+
+                <button type="submit" class="btn login-submit">
+                    Acessar sistema
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html> 

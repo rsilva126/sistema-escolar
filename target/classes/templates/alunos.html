@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Alunos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container">
+
+            <div class="page-header">
+                <div>
+                    <h1>Alunos</h1>
+                    <p class="page-description">
+                        Gerencie os registros dos estudantes da rede municipal.
+                    </p>
+                </div>
+
+                <div class="table-header-right">
+                    <a href="/alunos/novo" class="btn">Novo Aluno</a>
+                    <a href="/" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+
+            <p th:if="${mensagemSucesso}" th:text="${mensagemSucesso}" class="message-success"></p>
+            <p th:if="${mensagemErro}" th:text="${mensagemErro}" class="message-error"></p>
+
+            <form method="get" action="/alunos-view" class="filter-panel">
+                <h3 class="filter-panel-title">Filtros de consulta</h3>
+
+                <div class="filter-grid">
+                    <div class="filter-field">
+                        <label for="busca">Nome do aluno</label>
+                        <input type="text"
+                               id="busca"
+                               name="busca"
+                               th:value="${busca}"
+                               placeholder="Digite o nome do aluno">
+                    </div>
+
+                    <div class="filter-field">
+                        <label for="status">Status</label>
+                        <select id="status" name="status">
+                            <option value="">Todos</option>
+                            <option value="ATIVO" th:selected="${status == 'ATIVO'}">ATIVO</option>
+                            <option value="INATIVO" th:selected="${status == 'INATIVO'}">INATIVO</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-field">
+                        <label for="escolaId">Escola</label>
+                        <select id="escolaId" name="escolaId">
+                            <option value="">Todas</option>
+                            <option th:each="escola : ${escolas}"
+                                    th:value="${escola.id}"
+                                    th:text="${escola.nome}"
+                                    th:selected="${escolaId != null and escola.id == escolaId}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="filter-field">
+                        <label for="turmaId">Turma</label>
+                        <select id="turmaId" name="turmaId">
+                            <option value="">Todas</option>
+                            <option th:each="turma : ${turmas}"
+                                    th:value="${turma.id}"
+                                    th:text="${turma.nome}"
+                                    th:selected="${turmaId != null and turma.id == turmaId}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="btn">Aplicar</button>
+                    <a href="/alunos-view" class="btn btn-secondary">Limpar</a>
+                </div>
+            </form>
+
+            <div class="active-filters"
+                 th:if="${(busca != null and !#strings.isEmpty(busca)) or
+                          (status != null and !#strings.isEmpty(status)) or
+                          (escolaId != null) or
+                          (turmaId != null)}">
+
+                <div class="active-filter-chip"
+                     th:if="${busca != null and !#strings.isEmpty(busca)}">
+                    <span class="active-filter-label">Nome:</span>
+                    <span th:text="${busca}"></span>
+                </div>
+
+                <div class="active-filter-chip"
+                     th:if="${status != null and !#strings.isEmpty(status)}">
+                    <span class="active-filter-label">Status:</span>
+                    <span th:text="${status}"></span>
+                </div>
+
+                <div class="active-filter-chip"
+                     th:if="${escolaId != null}">
+                    <span class="active-filter-label">Escola:</span>
+                    <span th:text="${nomeEscolaFiltro}"></span>
+                </div>
+
+                <div class="active-filter-chip"
+                     th:if="${nomeTurmaFiltro != null}">
+                    <span class="active-filter-label">Turma:</span>
+                    <span th:text="${nomeTurmaFiltro}"></span>
+                </div>
+            </div>
+
+            <div class="actions" style="margin-bottom: 16px;">
+                <span class="stat-chip">
+                    Alunos encontrados: <span th:text="${totalItens}">0</span>
+                </span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Data de Nascimento</th>
+                        <th>CPF</th>
+                        <th>Nome da Mãe</th>
+                        <th>Telefone do Responsável</th>
+                        <th>Escola</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="aluno : ${alunos}">
+                        <td th:text="${aluno.id}"></td>
+                        <td th:text="${aluno.nome}"></td>
+                        <td th:text="${aluno.dataNascimento}"></td>
+                        <td th:text="${aluno.cpf}"></td>
+                        <td th:text="${aluno.nomeMae}"></td>
+                        <td th:text="${aluno.telefoneResponsavel}"></td>
+                        <td th:text="${aluno.escola}"></td>
+                        <td th:text="${aluno.status}"></td>
+                        <td>
+                            <div class="action-group">
+                                <a th:href="@{/alunos/editar/{id}(id=${aluno.id})}"
+                                   class="action-link action-edit">
+                                    Editar
+                                </a>
+
+                                <a th:href="@{/alunos/excluir/{id}(id=${aluno.id})}"
+                                   class="action-link action-delete"
+                                   onclick="return confirm('Deseja realmente excluir este aluno?');">
+                                    Excluir
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(alunos)}">
+                        <td colspan="9" class="text-center">Nenhum aluno encontrado.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="actions" style="margin-top: 18px; justify-content: center;"
+                 th:if="${totalPaginas > 1}">
+                <a th:if="${paginaAtual > 0}"
+                   th:href="@{/alunos-view(
+                        pagina=${paginaAtual - 1},
+                        tamanho=10,
+                        busca=${busca},
+                        status=${status},
+                        escolaId=${escolaId},
+                        turmaId=${turmaId})}"
+                   class="btn btn-secondary">
+                    Anterior
+                </a>
+
+                <span class="stat-chip">
+                    Página <span th:text="${paginaAtual + 1}"></span> de <span th:text="${totalPaginas}"></span>
+                </span>
+
+                <a th:if="${paginaAtual + 1 < totalPaginas}"
+                   th:href="@{/alunos-view(
+                        pagina=${paginaAtual + 1},
+                        tamanho=10,
+                        busca=${busca},
+                        status=${status},
+                        escolaId=${escolaId},
+                        turmaId=${turmaId})}"
+                   class="btn btn-secondary">
+                    Próxima
+                </a>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+</body>
+</html> 

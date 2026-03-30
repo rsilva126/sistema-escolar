@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema Escolar</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container">
+
+            <div class="page-header">
+                <div>
+                    <h1>Painel Principal</h1>
+                    <p class="page-description">
+                        Acompanhe os principais indicadores do sistema e acesse os módulos disponíveis.
+                    </p>
+                </div>
+            </div>
+
+            <form method="get" action="/" class="filter-panel">
+                <h3 class="filter-panel-title">Visão institucional por escola</h3>
+
+                <div class="filter-grid">
+                    <div class="filter-field">
+                        <label for="escolaId">Selecionar escola</label>
+                        <select id="escolaId" name="escolaId">
+                            <option value="">Visão geral do sistema</option>
+                            <option th:each="escola : ${escolas}"
+                                    th:value="${escola.id}"
+                                    th:text="${escola.nome}"
+                                    th:selected="${escolaId != null and escola.id == escolaId}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="btn">Aplicar</button>
+                    <a href="/" class="btn btn-secondary">Limpar</a>
+                </div>
+            </form>
+
+            <div class="active-filters" th:if="${nomeEscolaSelecionada != null}">
+                <div class="active-filter-chip">
+                    <span class="active-filter-label">Escola:</span>
+                    <span th:text="${nomeEscolaSelecionada}"></span>
+                </div>
+            </div>
+
+            <div class="menu-grid">
+                <div class="card">
+                    <div class="module-badge badge-escolas">Indicador institucional</div>
+                    <div class="card-icon">🏢</div>
+                    <h3>Total de Escolas</h3>
+                    <p th:text="${totalEscolas}">0</p>
+                </div>
+
+                <div class="card">
+                    <div class="module-badge badge-alunos">Indicador acadêmico</div>
+                    <div class="card-icon">👨‍🎓</div>
+                    <h3>Total de Alunos</h3>
+                    <p th:text="${totalAlunos}">0</p>
+                </div>
+
+                <div class="card">
+                    <div class="module-badge badge-turmas">Indicador pedagógico</div>
+                    <div class="card-icon">🏫</div>
+                    <h3>Total de Turmas</h3>
+                    <p th:text="${totalTurmas}">0</p>
+                </div>
+
+                <div class="card">
+                    <div class="module-badge badge-matriculas">Indicador de vínculo</div>
+                    <div class="card-icon">📝</div>
+                    <h3>Total de Matrículas</h3>
+                    <p th:text="${totalMatriculas}">0</p>
+                </div>
+
+                <div class="card">
+                    <div class="module-badge badge-usuarios">Indicador administrativo</div>
+                    <div class="card-icon">👥</div>
+                    <h3>Total de Usuários</h3>
+                    <p th:text="${totalUsuarios}">0</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📊 Ambiente de Gestão Educacional</h3>
+
+                <p style="margin-top:10px;">
+                    Plataforma institucional destinada ao gerenciamento das atividades
+                    administrativas e pedagógicas da rede municipal de ensino de Carapebus. O sistema permite o controle de dados escolares, acompanhamento de alunos
+                    e apoio à tomada de decisão por parte da gestão educacional.
+                </p>
+            </div> 
+
+            <div style="margin-top: 30px;">
+                <h2>Módulos do sistema</h2>
+                <p class="page-description">
+                    Selecione uma área para acessar os cadastros, consultas e rotinas administrativas.
+                </p>
+            </div>
+
+            <div class="menu-grid">
+                <a class="card-link" href="/escolas-view">
+                    <div class="card">
+                        <div class="module-badge badge-escolas">Base institucional</div>
+                        <div class="card-icon">🏢</div>
+                        <h3>Escolas</h3>
+                        <p>Cadastre e gerencie as unidades escolares vinculadas ao sistema.</p>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/alunos-view">
+                    <div class="card">
+                        <div class="module-badge badge-alunos">Gestão estudantil</div>
+                        <div class="card-icon">👨‍🎓</div>
+                        <h3>Alunos</h3>
+                        <p>Consulte, cadastre, edite e acompanhe os dados dos estudantes.</p>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/turmas-view">
+                    <div class="card">
+                        <div class="module-badge badge-turmas">Organização escolar</div>
+                        <div class="card-icon">🏫</div>
+                        <h3>Turmas</h3>
+                        <p>Estruture turmas por série, turno, escola e ano letivo.</p>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/matriculas-view">
+                    <div class="card">
+                        <div class="module-badge badge-matriculas">Movimentação acadêmica</div>
+                        <div class="card-icon">📝</div>
+                        <h3>Matrículas</h3>
+                        <p>Vincule alunos às turmas e acompanhe a situação de matrícula.</p>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/usuarios-view">
+                    <div class="card">
+                        <div class="module-badge badge-usuarios">Administração</div>
+                        <div class="card-icon">👥</div>
+                        <h3>Usuários</h3>
+                        <p>Gerencie os usuários do sistema e suas funções institucionais.</p>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/professor-turma-disciplina-view">
+                    <div class="card">
+                        <div class="module-badge badge-usuarios">Vínculos pedagógicos</div>
+                        <div class="card-icon">📘</div>
+                        <h3>Diário - Vínculos</h3>
+                        <p>Relacione professor, turma, disciplina e ano letivo.</p>
+                    </div>
+                </a>
+
+                <a class="card-link" href="/diario">
+                    <div class="card">
+                        <div class="module-badge badge-matriculas">Rotina pedagógica</div>
+                        <div class="card-icon">📗</div>
+                        <h3>Diário Escolar</h3>
+                        <p>Lance frequência, consulte registros e acompanhe relatórios por aluno.</p>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            Sistema Escolar • Prefeitura Municipal de Carapebus
+        </div>
+    </main>
+</div>
+
+</body>
+</html> 

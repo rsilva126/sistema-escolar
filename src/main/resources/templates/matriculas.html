@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Matrículas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container">
+
+            <div class="page-header">
+                <div>
+                    <h1>Matrículas</h1>
+                    <p class="page-description">
+                        Gerencie os vínculos dos alunos com turmas e anos letivos.
+                    </p>
+                </div>
+
+                <div class="table-header-right">
+                    <a href="/matriculas/novo" class="btn">Nova Matrícula</a>
+                    <a href="/" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+
+            <p th:if="${mensagemSucesso}" th:text="${mensagemSucesso}" class="message-success"></p>
+            <p th:if="${mensagemErro}" th:text="${mensagemErro}" class="message-error"></p>
+
+            <form method="get" action="/matriculas-view" class="filter-panel">
+                <h3 class="filter-panel-title">Filtros de consulta</h3>
+
+                <div class="filter-grid">
+                    <div class="filter-field">
+                        <label for="busca">Nome do aluno</label>
+                        <input type="text"
+                               id="busca"
+                               name="busca"
+                               th:value="${busca}"
+                               placeholder="Digite o nome do aluno">
+                    </div>
+
+                    <div class="filter-field">
+                        <label for="escolaId">Escola</label>
+                        <select id="escolaId" name="escolaId">
+                            <option value="">Todas</option>
+                            <option th:each="escola : ${escolas}"
+                                    th:value="${escola.id}"
+                                    th:text="${escola.nome}"
+                                    th:selected="${escolaId != null and escola.id == escolaId}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="btn">Aplicar</button>
+                    <a href="/matriculas-view" class="btn btn-secondary">Limpar</a>
+                </div>
+            </form>
+
+            <div class="active-filters"
+                 th:if="${(busca != null and !#strings.isEmpty(busca)) or (escolaId != null)}">
+
+                <div class="active-filter-chip"
+                     th:if="${busca != null and !#strings.isEmpty(busca)}">
+                    <span class="active-filter-label">Aluno:</span>
+                    <span th:text="${busca}"></span>
+                </div>
+
+                <div class="active-filter-chip"
+                     th:if="${escolaId != null}">
+                    <span class="active-filter-label">Escola:</span>
+                    <span th:text="${nomeEscolaFiltro}"></span>
+                </div>
+            </div>
+
+            <div class="actions" style="margin-bottom: 16px;">
+                <span class="stat-chip">
+                    Matrículas encontradas: <span th:text="${totalItens}">0</span>
+                </span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Aluno</th>
+                        <th>Turma</th>
+                        <th>Ano Letivo</th>
+                        <th>Data da Matrícula</th>
+                        <th>Situação</th>
+                        <th>Número da Matrícula</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="matricula : ${matriculas}">
+                        <td th:text="${matricula.id}"></td>
+                        <td th:text="${matricula.aluno}"></td>
+                        <td th:text="${matricula.turma}"></td>
+                        <td th:text="${matricula.anoLetivo}"></td>
+                        <td th:text="${matricula.dataMatricula}"></td>
+                        <td th:text="${matricula.situacao}"></td>
+                        <td th:text="${matricula.numeroMatricula}"></td>
+
+                        <td>
+                            <div class="action-group">
+                                <a th:href="@{/matriculas/editar/{id}(id=${matricula.id})}"
+                                   class="action-link action-edit">
+                                    Editar
+                                </a>
+
+                                <a th:href="@{/matriculas/excluir/{id}(id=${matricula.id})}"
+                                   class="action-link action-delete"
+                                   onclick="return confirm('Deseja realmente excluir esta matrícula?');">
+                                    Excluir
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(matriculas)}">
+                        <td colspan="8" class="text-center">Nenhuma matrícula encontrada.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="toast-container">
+                <div th:if="${mensagemSucesso}" class="toast toast-success" id="toastSucesso">
+                    <span th:text="${mensagemSucesso}"></span>
+                </div>
+
+                <div th:if="${mensagemErro}" class="toast toast-error" id="toastErro">
+                    <span th:text="${mensagemErro}"></span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script>
+    const toastSucesso = document.getElementById("toastSucesso");
+    const toastErro = document.getElementById("toastErro");
+
+    function esconderToast(toast) {
+        if (toast) {
+            setTimeout(() => {
+                toast.style.opacity = "0";
+            }, 2500);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    }
+
+    esconderToast(toastSucesso);
+    esconderToast(toastErro);
+</script>
+
+</body>
+</html> 

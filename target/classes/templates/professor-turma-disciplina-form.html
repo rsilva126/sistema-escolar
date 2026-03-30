@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${modoEdicao} ? 'Editar Vínculo' : 'Novo Vínculo'">Vínculo</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="layout">
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container form-card">
+            <p th:if="${erro}" th:text="${erro}" class="message-error"></p>
+
+            <h1 class="form-title" th:text="${modoEdicao} ? 'Editar Vínculo' : 'Cadastrar Vínculo'">Vínculo</h1>
+            <p class="form-subtitle">Relacione professor, turma, disciplina e ano letivo.</p>
+
+            <form th:action="@{/professor-turma-disciplina/salvar}" th:object="${vinculo}" method="post">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="usuarioId">Professor</label>
+                        <select id="usuarioId" th:field="*{usuarioId}" required>
+                            <option value="">Selecione</option>
+                            <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nome}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="turmaId">Turma</label>
+                        <select id="turmaId" th:field="*{turmaId}" required>
+                            <option value="">Selecione</option>
+                            <option th:each="turma : ${turmas}" th:value="${turma.id}" th:text="${turma.nome}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="disciplinaId">Disciplina</label>
+                        <select id="disciplinaId" th:field="*{disciplinaId}" required>
+                            <option value="">Selecione</option>
+                            <option th:each="disciplina : ${disciplinas}" th:value="${disciplina.id}" th:text="${disciplina.nome}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="anoLetivoId">Ano Letivo</label>
+                        <select id="anoLetivoId" th:field="*{anoLetivoId}" required>
+                            <option value="">Selecione</option>
+                            <option th:each="ano : ${anosLetivos}" th:value="${ano.id}" th:text="${ano.descricao}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-field form-field-full">
+                        <label for="status">Status</label>
+                        <select id="status" th:field="*{status}">
+                            <option value="ATIVO">ATIVO</option>
+                            <option value="INATIVO">INATIVO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn" th:text="${modoEdicao} ? 'Atualizar' : 'Salvar'">Salvar</button>
+                    <a href="/professor-turma-disciplina-view" class="btn btn-secondary">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>

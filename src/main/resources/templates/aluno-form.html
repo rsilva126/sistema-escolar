@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Aluno</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="layout">
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container form-card">
+            <p th:if="${erro}" th:text="${erro}" class="message-error"></p>
+
+            <h1 class="form-title" th:text="${modoEdicao} ? 'Editar Aluno' : 'Cadastrar Aluno'">Aluno</h1>
+            <p class="form-subtitle">Preencha os dados do aluno do sistema.</p>
+
+            <form th:action="@{/alunos/salvar}" th:object="${aluno}" method="post">
+
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form-grid">
+
+                    <div class="form-field">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" th:field="*{nome}" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="dataNascimento">Data de Nascimento</label>
+                        <input type="date" id="dataNascimento" th:field="*{dataNascimento}">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="cpf">CPF</label>
+                        <input type="text" id="cpf" th:field="*{cpf}">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="rg">RG</label>
+                        <input type="text" id="rg" th:field="*{rg}">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="nomeMae">Nome da Mãe</label>
+                        <input type="text" id="nomeMae" th:field="*{nomeMae}">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="nomePai">Nome do Pai</label>
+                        <input type="text" id="nomePai" th:field="*{nomePai}">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="telefoneResponsavel">Telefone do Responsável</label>
+                        <input type="text" id="telefoneResponsavel" th:field="*{telefoneResponsavel}">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="endereco">Endereço</label>
+                        <input type="text" id="endereco" th:field="*{endereco}">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="escolaId">Escola</label>
+                        <select id="escolaId" th:field="*{escolaId}" required>
+                            <option value="">Selecione</option>
+                            <option th:each="escola : ${escolas}"
+                                    th:value="${escola.id}"
+                                    th:text="${escola.nome}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="status">Status</label>
+                        <select id="status" th:field="*{status}">
+                            <option value="ATIVO">ATIVO</option>
+                            <option value="INATIVO">INATIVO</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn"
+                            th:text="${modoEdicao} ? 'Atualizar' : 'Salvar'">
+                        Salvar
+                    </button>
+                    <a href="/alunos-view" class="btn btn-secondary">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>

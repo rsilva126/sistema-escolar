@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lançamento de Frequência</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container">
+            <h1 class="form-title">Lançamento de Frequência</h1>
+            <p class="form-subtitle">
+                <strong>Professor:</strong> <span th:text="${vinculo.usuario.nome}"></span> |
+                <strong>Turma:</strong> <span th:text="${vinculo.turma.nome}"></span> |
+                <strong>Disciplina:</strong> <span th:text="${vinculo.disciplina.nome}"></span> |
+                <strong>Data:</strong> <span th:text="${dataAula}"></span>
+            </p>
+
+            <form  th:action="@{/diario/frequencia/salvar}" method="post">
+                <input type="hidden" name="vinculoId" th:value="${vinculo.id}">
+                <input type="hidden" name="dataAula" th:value="${dataAula}">
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>Número da Matrícula</th>
+                            <th>Presença</th>
+                            <th>Observação</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="matricula : ${matriculas}">
+                            <td th:text="${matricula.aluno.nome}"></td>
+                            <td th:text="${matricula.numeroMatricula}"></td>
+                            <td>
+                                <input type="hidden" name="matriculaIds" th:value="${matricula.id}">
+                                <select name="presencas" required>
+                                    <option value="PRESENTE">PRESENTE</option>
+                                    <option value="AUSENTE">AUSENTE</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" name="observacoes" placeholder="Observação opcional">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn">Salvar Frequência</button>
+                    <a href="/diario" class="btn btn-secondary">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

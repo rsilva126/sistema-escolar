@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "GerarSenha",
+            "request": "launch",
+            "mainClass": "com.sistemaescolar.util.GerarSenha",
+            "projectName": "sistema-escolar"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SistemaescolarApplication<sistema-escolar>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.sistemaescolar.SistemaescolarApplication",
+            "projectName": "sistema-escolar",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

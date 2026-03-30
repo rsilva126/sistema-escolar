@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${modoEdicao} ? 'Editar Escola' : 'Nova Escola'">Escola</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container form-card">
+            <p th:if="${erro}" th:text="${erro}" class="message-error"></p>
+
+            <h1 class="form-title" th:text="${modoEdicao} ? 'Editar Escola' : 'Cadastrar Escola'">Escola</h1>
+            <p class="form-subtitle">Preencha os dados da escola.</p>
+
+            <form th:action="@{/escolas/salvar}" th:object="${escola}" method="post">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form-grid">
+                    <div class="form-field form-field-full">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" th:field="*{nome}" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="codigoInep">Código INEP</label>
+                        <input type="text" id="codigoInep" th:field="*{codigoInep}">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="cnpj">CNPJ</label>
+                        <input type="text" id="cnpj" th:field="*{cnpj}">
+                    </div>
+
+                    <div class="form-field form-field-full">
+                        <label for="endereco">Endereço</label>
+                        <input type="text" id="endereco" th:field="*{endereco}">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="telefone">Telefone</label>
+                        <input type="text" id="telefone" th:field="*{telefone}">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" th:field="*{email}">
+                    </div>
+
+                    <div class="form-field form-field-full">
+                        <label for="status">Status</label>
+                        <select id="status" th:field="*{status}">
+                            <option value="ATIVA">ATIVA</option>
+                            <option value="INATIVA">INATIVA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn" th:text="${modoEdicao} ? 'Atualizar' : 'Salvar'">Salvar</button>
+                    <a href="/escolas-view" class="btn btn-secondary">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

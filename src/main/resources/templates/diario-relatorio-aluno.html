@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório por Aluno</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="fragments/sidebar :: sidebarInstitucional"></div>
+
+    <main class="main">
+
+        <div th:replace="fragments/topbar :: topbarInstitucional"></div>
+
+        <div class="container">
+
+            <div class="page-header">
+                <div>
+                    <h1>Relatório por Aluno</h1>
+                    <p class="page-description">
+                        Consulte o histórico completo de frequência e o percentual de presença do aluno.
+                    </p>
+                </div>
+
+                <div class="table-header-right">
+                    <a href="/diario" class="btn btn-secondary">Voltar</a>
+                </div>
+            </div>
+
+            <!-- FILTRO -->
+            <div class="filter-panel">
+                <form method="get" action="/diario/relatorio-aluno">
+
+                    <div class="filter-grid">
+                        <div class="form-field">
+                            <label for="alunoId">Aluno</label>
+                            <select id="alunoId" name="alunoId" required>
+                                <option value="">Selecione</option>
+                                <option th:each="aluno : ${alunos}"
+                                        th:value="${aluno.id}"
+                                        th:text="${aluno.nome}"
+                                        th:selected="${aluno.id == alunoId}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button type="submit" class="btn">Gerar Relatório</button>
+                        <a href="/diario/relatorio-aluno" class="btn btn-secondary">Limpar</a>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- RESUMO -->
+            <div th:if="${resumo != null}" class="menu-grid">
+
+                <div class="card">
+                    <div class="module-badge">Aluno</div>
+                    <h3 th:text="${resumo.aluno}">Aluno</h3>
+                    <p>Relatório individual de frequência.</p>
+                </div>
+
+                <div class="card">
+                    <div class="module-badge">Total de aulas</div>
+                    <h3 th:text="${resumo.totalAulas}">0</h3>
+                    <p>Quantidade total de registros lançados.</p>
+                </div>
+
+                <div class="card">
+                    <div class="module-badge">Presenças</div>
+                    <h3 th:text="${resumo.totalPresencas}">0</h3>
+                    <p>Total de aulas com presença registrada.</p>
+                </div>
+
+                <div class="card">
+                    <div class="module-badge">Ausências</div>
+                    <h3 th:text="${resumo.totalAusencias}">0</h3>
+                    <p>Total de faltas lançadas para o aluno.</p>
+                </div>
+
+                <div class="card">
+                    <div class="module-badge">Percentual</div>
+                    <h3 th:text="${#numbers.formatDecimal(resumo.percentualPresenca, 1, 2)} + '%'">0%</h3>
+                    <p>Percentual automático de presença no período registrado.</p>
+                </div>
+
+            </div>
+
+            <!-- TABELA HISTÓRICO -->
+            <div th:if="${historico != null}" class="table-wrapper" style="margin-top: 24px;">
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Turma</th>
+                        <th>Disciplina</th>
+                        <th>Presença</th>
+                        <th>Observação</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="f : ${historico}">
+                        <td th:text="${f.dataAula}"></td>
+                        <td th:text="${f.turma}"></td>
+                        <td th:text="${f.disciplina}"></td>
+
+                        <td>
+                            <span th:if="${f.presenca == 'PRESENTE'}"
+                                  class="badge badge-success">Presente</span>
+
+                            <span th:if="${f.presenca == 'AUSENTE'}"
+                                  class="badge badge-danger">Ausente</span>
+                        </td>
+
+                        <td th:text="${f.observacao}"></td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(historico)}">
+                        <td colspan="5" class="text-center">
+                            Nenhum registro encontrado para este aluno.
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html> 
